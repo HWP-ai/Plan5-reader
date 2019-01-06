@@ -19,7 +19,7 @@
   }
   function randomLine(){
       localStorage.lastrand = Math.floor(Math.random() * 253) + 1;
-      return '' + localStorage.lastrand + ' ' + window["L" + localStorage.lastrand + "_PLAN5"];
+      return '' + localStorage.lastrand + '。 ' + window["L" + localStorage.lastrand + "_PLAN5"];
   }
   
   function writeRandom(){
@@ -29,7 +29,7 @@
 
   function writeLine(next){
       localStorage.lastrand = next;
-      document.getElementById("content").innerHTML = '' + next + ' ' + window["L" + next + "_PLAN5"];
+      document.getElementById("content").innerHTML = '' + next + '。 ' + window["L" + next + "_PLAN5"];
   }
   
   writeLine(localStorage.lastrand);
