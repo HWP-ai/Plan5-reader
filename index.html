@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<script src="PLAN5.js"></script>
 <meta charset="utf8">
 <style>
   body{
@@ -7,17 +8,67 @@
 </style>
 <link rel="icon" href="favicon.ico" type="image/x-icon"/>
 <title>孙中山第五计划阅读器</title>
-<script src="PLAN5.js"></script>
 <h1>--** 第五计划 **--</h1>
-<p>
-  <script>
-    document.write("");
-    function randomLine(){
-	i = Math.floor(Math.random() * 253) + 1;
-	return '' + i + ' ' + window["L" + i + "_PLAN5"];
-    }
-    document.write(randomLine());
-  </script>
-  <br>
-  <button style="position: absolute; bottom: 0.5em; font-size: 48px; padding: 0.5em 1.5em;" onclick="location.reload()">刷新</button>
+<p id="content"></p>
+<script>
+  if(!localStorage){
+      localStorage = {};
+  }
+  if(!localStorage.lastrand){
+      localStorage.lastrand = 1;
+  }
+  function randomLine(){
+      localStorage.lastrand = Math.floor(Math.random() * 253) + 1;
+      return '' + localStorage.lastrand + ' ' + window["L" + localStorage.lastrand + "_PLAN5"];
+  }
+  
+  function writeRandom(){
+      document.getElementById("content").innerHTML = randomLine();
+  }
+
+
+  function writeLine(next){
+      localStorage.lastrand = next;
+      document.getElementById("content").innerHTML = '' + next + ' ' + window["L" + next + "_PLAN5"];
+  }
+  
+  writeLine(localStorage.lastrand);
+
+  function LastrandNextWrite(){
+      if(localStorage.lastrand == 253){
+	  alert('已经是最后一条。');
+	  return;
+      }
+      writeLine(++localStorage.lastrand);
+  }
+
+  function LastrandPrevWrite(){
+      if(localStorage.lastrand == 1){
+	  alert('已经是第一条。');
+	  return;
+      }
+      writeLine(--localStorage.lastrand);
+  }
+
+  function Wanting(){
+      var i = prompt("要跳转到第几条？(1~253)");
+      if(!i){
+	  return;
+      }
+      i = Number(i);
+      if(i < 1 || i > 253){
+	  alert('无此条');
+	  return;
+      }
+      writeLine(i);
+  }
+  
+</script>
+<p style="position: absolute; bottom: 0.5em; font-size: 48px;">
+  <button style="padding: 0.5em 1.5em;" onclick="writeLine(1)">第一条</button>
+  <button style="padding: 0.5em 1.5em;" onclick="LastrandPrevWrite()">上一条</button>
+  <button style="padding: 0.5em 1.5em;" onclick="LastrandNextWrite()">下一条</button>
+  <button style="padding: 0.5em 1.5em;" onclick="writeRandom()">随机</button>
+  <button style="padding: 0.5em 1.5em;" onclick="writeLine(253)">最后</button>
+  <button style="padding: 0.5em 1.5em;" onclick="Wanting()">指定</button>
 </p>
