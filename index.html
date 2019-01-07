@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <script src="PLAN5.js"></script>
 <meta charset="utf8">
 <style>
-  body{
+  body, #mynotes{
       font-size: 48px;
       font-family: 楷体;
       letter-spacing: 8px;
@@ -12,12 +12,16 @@
 <title>孙中山第五计划阅读器</title>
 <h1>--** 第五计划 **--</h1>
 <p id="content"></p>
+<textarea onchange="saveMyNotes()" id="mynotes" style="min-height: 30em; min-width: 95%;"></textarea>
 <script>
   if(!localStorage){
       localStorage = {};
   }
   if(!localStorage.lastrand){
       localStorage.lastrand = 1;
+  }
+  function saveMyNotes(){
+      localStorage['MyNotes_'+localStorage.lastrand] = document.getElementById("mynotes").value;
   }
   function randomLine(){
       localStorage.lastrand = Math.floor(Math.random() * 253) + 1;
@@ -32,6 +36,10 @@
   function writeLine(next){
       localStorage.lastrand = next;
       document.getElementById("content").innerHTML = '' + next + '。 ' + window["L" + next + "_PLAN5"];
+      document.getElementById("mynotes").value = (
+          localStorage['MyNotes_'+localStorage.lastrand] === undefined ? 
+              ""               : localStorage['MyNotes_'+localStorage.lastrand]
+      );
   }
   
   writeLine(localStorage.lastrand);
@@ -66,7 +74,7 @@
   }
   
 </script>
-<p style="position: absolute; bottom: 0.5em; font-size: 48px;">
+<p style="position: fixed; bottom: 0.5em; font-size: 48px;">
   <button style="padding: 0.5em 1.5em;" onclick="writeLine(1)">第一条</button>
   <button style="padding: 0.5em 1.5em;" onclick="LastrandPrevWrite()">上一条</button>
   <button style="padding: 0.5em 1.5em;" onclick="LastrandNextWrite()">下一条</button>
