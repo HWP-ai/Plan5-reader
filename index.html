@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<script src="PLAN5.js"></script>
+<script src="https://stdcn.github.io/PLAN5.js/PLAN5.js"></script>
 <meta charset="utf8">
 <style>
   body, #mynotes{
@@ -7,12 +7,19 @@
       font-family: 楷体;
       letter-spacing: 8px;
   }
+  textarea, textarea:focus{
+      border: none;
+      outline: 0;
+      box-shadow: 0;
+      cursor: url('favicon.ico'), auto;
+  }
 </style>
 <link rel="icon" href="favicon.ico" type="image/x-icon"/>
 <title>孙中山第五计划阅读器</title>
 <h1>--** 第五计划 **--</h1>
 <p id="content"></p>
-<textarea onchange="saveMyNotes()" id="mynotes" style="min-height: 30em; min-width: 95%;"></textarea>
+<textarea onkeydown="tab(this)" onchange="saveMyNotes()" 
+  id="mynotes" style="min-height: 30em; min-width: 95%;"></textarea>
 <script>
   if(!localStorage){
       localStorage = {};
@@ -37,13 +44,30 @@
       localStorage.lastrand = next;
       document.getElementById("content").innerHTML = '' + next + '。 ' + window["L" + next + "_PLAN5"];
       document.getElementById("mynotes").value = (
-          localStorage['MyNotes_'+localStorage.lastrand] === undefined ? 
-              ""               : localStorage['MyNotes_'+localStorage.lastrand]
+          ((localStorage['MyNotes_'+localStorage.lastrand] === undefined) || 
+          (localStorage['MyNotes_'+localStorage.lastrand] === '')) ? 
+              "●"               : localStorage['MyNotes_'+localStorage.lastrand]
       );
+      document.getElementById("mynotes").focus();
   }
   
   writeLine(localStorage.lastrand);
-
+  function tab(obj){
+    if (event.keyCode == 9)
+    {
+	event.preventDefault();
+        var indent = '  ●';
+        var start = obj.selectionStart;
+        var end = obj.selectionEnd;
+        var selected = window.getSelection().toString();
+        selected = indent + selected.replace(/\n/g, '\n' + indent);
+        obj.value = obj.value.substring(0, start) + selected
+            + obj.value.substring(end);
+        obj.setSelectionRange(start + indent.length, start
+            + selected.length);
+        localStorage['MyNotes_'+localStorage.lastrand] = document.getElementById("mynotes").value;
+    }
+  }
   function LastrandNextWrite(){
       if(localStorage.lastrand == 253){
 	  alert('已经是最后一条。');
